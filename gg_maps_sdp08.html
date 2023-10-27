@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN""http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <head>
+    <title>Carte 2D/3D(option Earth) des Sites de Planche du Quebec</title>
+    <script src="http://www.google.com/jsapi?key=ABQIAAAAOzDH5QmCapVskI-ijmHhPBTTGPB6-JTO5rMFK_omG5Flb3su6hQsujW5FMzWf7wHJmnKQO_fQohCfA"></script>
+    <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAOzDH5QmCapVskI-ijmHhPBTTGPB6-JTO5rMFK_omG5Flb3su6hQsujW5FMzWf7wHJmnKQO_fQohCfA"
+      type="text/javascript"></script>
+
+    <script>
+
+
+function failureCallback(object) {
+}
+
+
+    function initialize() {
+      if (GBrowserIsCompatible()) {
+        // define the crosshair tile layer and its required functions
+        var crossLayer = new GTileLayer(new GCopyrightCollection(""), 0, 15);
+        crossLayer.getTileUrl =  function(tile, zoom) {
+          return "./include/tile_crosshairs.png";
+        }
+        crossLayer.isPng = function() {return true;}
+
+        // Create a new map type incorporating the tile layer
+        var layerTerCross = [ G_PHYSICAL_MAP.getTileLayers()[0],
+                              crossLayer ];
+        var mtTerCross = new GMapType(layerTerCross,
+                                      G_PHYSICAL_MAP.getProjection(), "Ter+");
+
+        var map = new GMap2(document.getElementById("map_canvas"),
+            { size: new GSize(800,600) } );
+        map.addMapType(G_PHYSICAL_MAP);
+        map.addMapType(mtTerCross);
+        map.setCenter(new GLatLng(46, -72), 4);
+        map.addControl(new GLargeMapControl())
+
+        // add 'Earth' as one of the map types
+        map.addMapType(G_SATELLITE_3D_MAP);
+
+        geoXml = new GGeoXml("http://www.flipperdesign.com/wind_spots_qc.kml");
+
+
+
+        var mapControl = new GHierarchicalMapTypeControl();
+        
+        // Set up map type menu relationships
+        mapControl.clearRelationships();
+        mapControl.addRelationship(G_SATELLITE_MAP, G_HYBRID_MAP, "Labels", false);
+        mapControl.addRelationship(G_PHYSICAL_MAP, mtTerCross, "Crosshairs");
+  
+        // Add control after you've specified the relationships
+        map.addControl(mapControl);
+        map.addOverlay(geoXml);
+      }
+    }
+
+
+
+    </script>
+
+
+  </head>
+  <body onload='initialize()' onunload="GUnload()" id='body'>
+    <center>
+      <div>
+        Google MAPS, carte 2D/3D des Sites de Planche du Quebec!
+
+
+    <div id="map_canvas" style="width: 800px; height: 600px"></div>
+
+
+    <p>
+    <a href="http://flipperdesign.com/Sites_planche/" target="_SitesPQC">
+    Pour voir les descriptions des sites.</a> 
+    </p>
+
+    <p>
+    <a href="http://dl.google.com/earth/plugin/GoogleEarthPluginSetup_en.exe" target="_SitesPQC">
+    Telechargement du plugin Google Earth pour IE et Firefox.</a> 
+    </p>
+
+  </center>
+
+
+
+  </body>
+
+
+
+</html>
